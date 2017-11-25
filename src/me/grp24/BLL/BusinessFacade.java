@@ -1,11 +1,12 @@
 package me.grp24.BLL;
 
 import me.grp24.BLL.ACQ.ISensor;
-import me.grp24.BLL.ACQ.SensorType;
+import me.grp24.BLL.ACQ.Sensor;
 import me.grp24.BLL.ACQ.Business;
 import me.grp24.BLL.ACQ.Temperature;
 import me.grp24.BLL.logger.Logger;
 import me.grp24.BLL.sensor.CO2Sensor;
+import me.grp24.BLL.sensor.SelectedSensor;
 import me.grp24.BLL.sensor.TempSensor;
 
 import java.util.*;
@@ -45,18 +46,19 @@ public class BusinessFacade implements Business {
 	}
 
 	@Override
-	public boolean addSensor(String buildingName, String name, SensorType type) {
-		if(type.getUnit() != null) {
+	public boolean addSensor(String buildingName, String name, SelectedSensor sensor) {
+		if(sensor.getUnit() != null) {
 			if(buildings.containsKey(buildingName)) {
 				if(!buildings.get(buildingName).getSensors().containsKey(name)) {
-					ISensor sensor = null;
+					ISensor isensor = null;
 
-					switch(type.getType()) {
-						case SensorType.TEMP_SENSOR: sensor = new TempSensor(name, Temperature.valueOf(type.getUnit())); break;
-						case SensorType.CO2_SENSOR: sensor = new CO2Sensor(name); break;
+					if(sensor.getSensor() == Sensor.TEMPERATUR.getId()) {
+						isensor = new TempSensor(name, Temperature.valueOf(sensor.getUnit()));
+					} else if(sensor.getSensor() == Sensor.CO2.getId()) {
+						isensor = new CO2Sensor(name);
 					}
 
-					buildings.get(buildingName).getSensors().put(name, sensor);
+					buildings.get(buildingName).getSensors().put(name, isensor);
 
 					return true;
 				}

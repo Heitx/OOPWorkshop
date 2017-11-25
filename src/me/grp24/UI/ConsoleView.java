@@ -3,6 +3,7 @@ package me.grp24.UI;
 import me.grp24.BLL.ACQ.*;
 import me.grp24.BLL.Building;
 import me.grp24.BLL.Location;
+import me.grp24.BLL.sensor.SelectedSensor;
 
 public class ConsoleView implements GUI {
 	private Business business;
@@ -17,8 +18,8 @@ public class ConsoleView implements GUI {
 		business.addBuilding("SDU", new Location("Niels Bohrs Alle", "Denmark"));
 		business.addBuilding("SDU 2", new Location("Niels Bohrs Alle", "Denmark"));
 
-		SensorType type = new SensorType(SensorType.TEMP_SENSOR, Temperature.CELSIUS.getName());
-		business.addSensor("SDU", "CO2 Sensor 1", type);
+		SelectedSensor selSensor = new SelectedSensor(Sensor.CO2.getId(), Sensor.CO2.getUnits()[0]);
+		business.addSensor("SDU", "CO2 Sensor 1", selSensor);
 
 		for(Building b : business.getBuildings().values()) {
 			System.out.println(b.getName());
